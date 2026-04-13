@@ -601,15 +601,22 @@ Chave gratuita disponível em [console.groq.com](https://console.groq.com) — o
 Crie o arquivo `.env` na raiz do projeto:
 
 ```env
+<<<<<<< HEAD
 # Firebase — obtenha no Firebase Console > Configurações do projeto
+=======
+>>>>>>> 2018e7c53c58d287049ec800328bb8da83cdcef5
 VITE_FIREBASE_API_KEY=
 VITE_FIREBASE_AUTH_DOMAIN=
 VITE_FIREBASE_PROJECT_ID=
 VITE_FIREBASE_STORAGE_BUCKET=
 VITE_FIREBASE_MESSAGING_SENDER_ID=
 VITE_FIREBASE_APP_ID=
+<<<<<<< HEAD
 
 # Groq — obtenha em console.groq.com/keys (gratuito)
+=======
+# VITE_GEMINI_API_KEY= removida estamos usando Groq agora
+>>>>>>> 2018e7c53c58d287049ec800328bb8da83cdcef5
 VITE_GROQ_API_KEY=
 ```
 

@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { BookOpen, Mail, Lock, LogIn, UserPlus } from 'lucide-react'
 
 export default function Login() {
-  const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth()
-  const navigate = useNavigate()
+  const { user, signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth()
 
   const [mode, setMode] = useState('login') // 'login' | 'register'
   const [email, setEmail] = useState('')
@@ -13,15 +12,17 @@ export default function Login() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  // Quando onAuthStateChanged setar o user, redireciona automaticamente
+  if (user) return <Navigate to="/" replace />
+
   const handleGoogle = async () => {
     setError('')
     setLoading(true)
     try {
       await signInWithGoogle()
-      navigate('/')
+      // navegação acontece via redirect acima quando user mudar
     } catch (e) {
       setError('Erro ao entrar com Google. Tente novamente.')
-    } finally {
       setLoading(false)
     }
   }
@@ -36,7 +37,7 @@ export default function Login() {
       } else {
         await signUpWithEmail(email, password)
       }
-      navigate('/')
+      // navegação acontece via redirect acima quando user mudar
     } catch (e) {
       const msgs = {
         'auth/user-not-found': 'Usuário não encontrado.',
@@ -47,7 +48,6 @@ export default function Login() {
         'auth/invalid-credential': 'Credenciais inválidas.',
       }
       setError(msgs[e.code] || 'Ocorreu um erro. Tente novamente.')
-    } finally {
       setLoading(false)
     }
   }
@@ -100,7 +100,11 @@ export default function Login() {
             disabled={loading}
             className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-stone-300 dark:border-stone-700 rounded-xl text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors font-medium mb-4 disabled:opacity-50"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#0d9488" strokeWidth="1.5"/><circle cx="12" cy="12" r="4" fill="#0d9488"/><path d="M12 8h8.5M5.5 17.5l4.25-7.35M18.5 17.5l-9.5-.05" stroke="#0d9488" strokeWidth="1.5"/></svg>
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="#0d9488" strokeWidth="1.5"/>
+              <circle cx="12" cy="12" r="4" fill="#0d9488"/>
+              <path d="M12 8h8.5M5.5 17.5l4.25-7.35M18.5 17.5l-9.5-.05" stroke="#0d9488" strokeWidth="1.5"/>
+            </svg>
             Continuar com Google
           </button>
 
@@ -153,13 +157,9 @@ export default function Login() {
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : mode === 'login' ? (
-                <>
-                  <LogIn className="w-4 h-4" /> Entrar
-                </>
+                <><LogIn className="w-4 h-4" /> Entrar</>
               ) : (
-                <>
-                  <UserPlus className="w-4 h-4" /> Criar conta
-                </>
+                <><UserPlus className="w-4 h-4" /> Criar conta</>
               )}
             </button>
           </form>

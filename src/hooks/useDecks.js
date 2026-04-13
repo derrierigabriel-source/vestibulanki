@@ -21,8 +21,9 @@ export function useDecks() {
   }, [fetchDecks])
 
   const addDeck = async (data) => {
-    await createDeck(user.uid, data)
+    const ref = await createDeck(user.uid, data)
     await fetchDecks()
+    return ref.id
   }
 
   const editDeck = async (deckId, data) => {

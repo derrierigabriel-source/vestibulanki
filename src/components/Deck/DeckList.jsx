@@ -18,9 +18,11 @@ export default function DeckList({ onStudy }) {
   )
 
   const handleCreate = async (deckData, cards) => {
-    const deckRef = await addDeck(deckData)
-    // addDeck returns void after refetch, need to get new deck id
-    // We'll handle card creation through a different flow
+    const deckId = await addDeck(deckData)
+    for (const card of cards) {
+      const { _key, id, ...cardData } = card
+      await addCard(deckId, cardData)
+    }
     setShowForm(false)
   }
 

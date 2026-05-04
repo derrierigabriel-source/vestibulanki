@@ -6,7 +6,7 @@ import {
   signOut as firebaseSignOut,
   onAuthStateChanged,
 } from 'firebase/auth'
-import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore'
+import { doc, setDoc, getDoc, getDocs, collection, serverTimestamp } from 'firebase/firestore'
 import { auth, db, googleProvider } from '../services/firebase'
 import { seedUserData } from '../services/seedService'
 
@@ -32,6 +32,12 @@ export function AuthProvider({ children }) {
             createdAt: serverTimestamp(),
           })
           await seedUserData(firebaseUser.uid)
+        } else {
+          // Roda o seed se o usuário não tiver nenhum baralho
+          const decksSnap = await getDocs(collection(db, 'users', firebaseUser.uid, 'decks'))
+          if (decksSnap.empty) {
+            await seedUserData(firebaseUser.uid)
+          }
         }
         setUser(firebaseUser)
       } else {

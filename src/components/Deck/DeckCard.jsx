@@ -116,14 +116,23 @@ export default function DeckCard({ deck, onStudy, onEdit, onDelete, getCards, re
           </div>
         )}
 
-        <button
-          onClick={() => onStudy(deck)}
-          disabled={cardCount === 0}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
-          style={{ backgroundColor: deck.color }}
-        >
-          <Play className="w-4 h-4" /> Estudar
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => onAIGenerate(deck)}
+            className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-semibold border border-violet-300 dark:border-violet-700 text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all active:scale-95"
+            title="Gerar cards com IA"
+          >
+            <Sparkles className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => onStudy(deck)}
+            disabled={cardCount === 0}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{ backgroundColor: deck.color }}
+          >
+            <Play className="w-4 h-4" /> Estudar
+          </button>
+        </div>
       </div>
     </div>
   )

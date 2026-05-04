@@ -12,7 +12,7 @@ import Stats from './pages/Stats'
 import Dashboard from './components/Dashboard'
 import {
   LayoutDashboard, Layers, BookOpen, GraduationCap, BarChart2,
-  Sun, Moon, LogOut, Menu, X,
+  Sun, Moon, LogOut, Menu, X, House,
 } from 'lucide-react'
 
 function useTheme() {
@@ -30,6 +30,7 @@ function useTheme() {
 }
 
 const NAV = [
+  { to: '/', label: 'Início', icon: House },
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/decks', label: 'Baralhos', icon: Layers },
   { to: '/study', label: 'Estudar', icon: BookOpen },

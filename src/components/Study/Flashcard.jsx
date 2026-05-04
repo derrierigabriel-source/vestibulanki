@@ -7,7 +7,7 @@ export default function Flashcard({ card, onAnswer, index, total }) {
   const [flipped, setFlipped] = useState(false)
   const [selectedOption, setSelectedOption] = useState(null)
   const [showPerceived, setShowPerceived] = useState(false)
-  const [result, setResult] = useState(null) // 'correct' | 'wrong'
+  const [result, setResult] = useState(null)
 
   const handleFlip = () => setFlipped(true)
 
@@ -33,70 +33,69 @@ export default function Flashcard({ card, onAnswer, index, total }) {
     setResult(null)
   }
 
+  const diffLabel = card.difficulty === 'easy' ? 'Fácil' : card.difficulty === 'medium' ? 'Médio' : 'Difícil'
+
   return (
-    <div className="flex flex-col items-center w-full max-w-xl mx-auto">
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: 580, margin: '0 auto' }}>
       {/* Progress */}
-      <div className="w-full mb-4">
-        <div className="flex justify-between text-xs text-stone-500 dark:text-stone-400 mb-1.5">
-          <span>Card {index + 1} de {total}</span>
-          <span className="capitalize text-xs px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800">
-            {card.difficulty === 'easy' ? 'Fácil' : card.difficulty === 'medium' ? 'Médio' : 'Difícil'}
-          </span>
+      <div style={{ width: '100%', marginBottom: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <span style={{ fontSize: 12, color: 'var(--fg-3)' }}>Card {index + 1} de {total}</span>
+          <span style={{
+            fontSize: 11, fontWeight: 600, padding: '3px 10px', borderRadius: 999,
+            background: 'var(--surface-2)', color: 'var(--fg-2)',
+          }}>{diffLabel}</span>
         </div>
-        <div className="h-1.5 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-teal-500 rounded-full transition-all duration-500"
-            style={{ width: `${((index + 1) / total) * 100}%` }}
-          />
+        <div style={{ height: 4, background: 'var(--border-subtle)', borderRadius: 99, overflow: 'hidden' }}>
+          <div style={{
+            height: '100%',
+            background: 'linear-gradient(90deg, var(--accent), var(--accent-hover))',
+            borderRadius: 99, width: `${((index + 1) / total) * 100}%`,
+            transition: 'width 500ms var(--ease-out)',
+          }} />
         </div>
       </div>
 
-      {/* Card with 3D flip */}
-      <div className="w-full" style={{ perspective: '1200px' }}>
-        <div
-          className="relative w-full transition-transform duration-500"
-          style={{
-            transformStyle: 'preserve-3d',
-            transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-            minHeight: '240px',
-          }}
-        >
+      {/* Flip card */}
+      <div className="flip-scene" style={{ marginBottom: 16 }}>
+        <div className={`flip-inner${flipped ? ' is-flipped' : ''}`} style={{ minHeight: 240 }}>
           {/* Front */}
-          <div
-            className="absolute inset-0 bg-white dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-lg p-6 flex flex-col justify-between"
-            style={{ backfaceVisibility: 'hidden' }}
-          >
-            <p
-              className="text-lg font-medium text-stone-800 dark:text-stone-100 text-center leading-relaxed"
-              style={{ fontFamily: 'Instrument Serif, serif' }}
-            >
-              {card.front}
-            </p>
+          <div className="flip-face" style={{ minHeight: 240 }}>
+            <p className="flip-q">{card.front}</p>
 
             {card.type === 'multiple' ? (
-              <div className="space-y-2 mt-4">
-                {(card.options || []).map((opt, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleMultipleSelect(i)}
-                    disabled={flipped}
-                    className={`w-full text-left px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${
-                      selectedOption === i
-                        ? i === card.correctOption
-                          ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300'
-                          : 'border-red-400 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-300'
-                        : 'border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300 hover:border-teal-400 hover:bg-teal-50 dark:hover:bg-teal-900/10'
-                    }`}
-                  >
-                    <span className="font-bold mr-2 text-stone-400">{LETTER[i]})</span>
-                    {opt}
-                  </button>
-                ))}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 'auto' }}>
+                {(card.options || []).map((opt, i) => {
+                  let bg = 'var(--surface-2)', border = 'var(--border-strong)', color = 'var(--fg-2)'
+                  if (selectedOption === i) {
+                    if (i === card.correctOption) { bg = 'var(--success-soft)'; border = 'var(--success)'; color = 'var(--fg-1)' }
+                    else { bg = 'var(--danger-soft)'; border = 'var(--danger)'; color = 'var(--fg-1)' }
+                  }
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => handleMultipleSelect(i)}
+                      disabled={flipped}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 10,
+                        padding: '12px 14px', borderRadius: 12,
+                        background: bg, border: `1px solid ${border}`, color,
+                        textAlign: 'left', fontSize: 14, fontWeight: 500,
+                        cursor: flipped ? 'default' : 'pointer',
+                        transition: 'background 100ms, border-color 100ms',
+                      }}
+                    >
+                      <span style={{ color: 'var(--fg-3)', fontWeight: 700, width: 22, flexShrink: 0 }}>{LETTER[i]}</span>
+                      {opt}
+                    </button>
+                  )
+                })}
               </div>
             ) : (
               <button
                 onClick={handleFlip}
-                className="w-full mt-4 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-semibold transition-colors"
+                className="btn-primary"
+                style={{ width: '100%', marginTop: 'auto' }}
               >
                 Ver resposta
               </button>
@@ -104,42 +103,52 @@ export default function Flashcard({ card, onAnswer, index, total }) {
           </div>
 
           {/* Back */}
-          <div
-            className="absolute inset-0 bg-white dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-lg p-6 flex flex-col justify-between"
-            style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-          >
-            <div>
+          <div className="flip-face flip-face--back" style={{ minHeight: 240 }}>
+            <div style={{ flex: 1 }}>
               {card.type === 'multiple' && (
-                <div className={`mb-3 flex items-center gap-2 text-sm font-semibold px-3 py-2 rounded-lg ${
-                  result === 'correct'
-                    ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600'
-                    : 'bg-red-50 dark:bg-red-900/20 text-red-600'
-                }`}>
-                  {result === 'correct' ? <CheckCircle className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
-                  {result === 'correct' ? 'Correto!' : `Incorreto — Resposta: ${LETTER[card.correctOption]})`}
+                <div style={{
+                  marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '10px 14px', borderRadius: 10, fontSize: 13, fontWeight: 600,
+                  background: result === 'correct' ? 'var(--success-soft)' : 'var(--danger-soft)',
+                  color: result === 'correct' ? 'var(--success)' : 'var(--danger)',
+                }}>
+                  {result === 'correct'
+                    ? <><CheckCircle style={{ width: 15, height: 15 }} /> Correto!</>
+                    : <><XCircle style={{ width: 15, height: 15 }} /> Incorreto — Resposta: {LETTER[card.correctOption]}</>
+                  }
                 </div>
               )}
-              <p
-                className="text-base text-stone-800 dark:text-stone-100 leading-relaxed"
-                style={{ fontFamily: 'Instrument Serif, serif' }}
-              >
+              <p style={{
+                fontFamily: 'var(--font-serif)', fontSize: 18, lineHeight: 1.55,
+                color: 'var(--fg-1)', margin: 0,
+              }}>
                 {card.back}
               </p>
             </div>
 
             {card.type === 'open' && !showPerceived && (
-              <div className="flex gap-3 mt-4">
+              <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
                 <button
                   onClick={() => handleOpenResult('wrong')}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 rounded-xl font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                  style={{
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    padding: '10px', borderRadius: 12,
+                    border: '1px solid var(--danger)', color: 'var(--danger)',
+                    background: 'transparent', fontWeight: 500, fontSize: 14, cursor: 'pointer',
+                  }}
                 >
-                  <XCircle className="w-4 h-4" /> Errei
+                  <XCircle style={{ width: 15, height: 15 }} /> Errei
                 </button>
                 <button
                   onClick={() => handleOpenResult('correct')}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 border border-emerald-300 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 rounded-xl font-medium hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
+                  style={{
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    padding: '10px', borderRadius: 12,
+                    border: '1px solid var(--success)', color: 'var(--success)',
+                    background: 'transparent', fontWeight: 500, fontSize: 14, cursor: 'pointer',
+                  }}
                 >
-                  <CheckCircle className="w-4 h-4" /> Acertei
+                  <CheckCircle style={{ width: 15, height: 15 }} /> Acertei
                 </button>
               </div>
             )}
@@ -149,32 +158,31 @@ export default function Flashcard({ card, onAnswer, index, total }) {
 
       {/* Perceived difficulty */}
       {showPerceived && (
-        <div className="w-full mt-4 bg-stone-50 dark:bg-stone-800 rounded-2xl p-4 border border-stone-200 dark:border-stone-700">
-          <p className="text-sm font-medium text-stone-600 dark:text-stone-400 text-center mb-3">
+        <div className="rate-box" style={{ width: '100%' }}>
+          <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--fg-3)', margin: '0 0 12px', fontWeight: 500 }}>
             Como foi para você?
           </p>
-          <div className="flex gap-2">
-            <button
-              onClick={() => handlePerceived('hard')}
-              className="flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl border border-red-200 dark:border-red-800 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-            >
-              <Frown className="w-5 h-5" />
-              <span className="text-xs font-medium">Muito difícil</span>
-            </button>
-            <button
-              onClick={() => handlePerceived('medium')}
-              className="flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl border border-amber-200 dark:border-amber-800 text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
-            >
-              <Meh className="w-5 h-5" />
-              <span className="text-xs font-medium">Médio</span>
-            </button>
-            <button
-              onClick={() => handlePerceived('easy')}
-              className="flex-1 flex flex-col items-center gap-1.5 py-3 rounded-xl border border-emerald-200 dark:border-emerald-800 text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
-            >
-              <Smile className="w-5 h-5" />
-              <span className="text-xs font-medium">Fácil</span>
-            </button>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8 }}>
+            {[
+              { key: 'hard', icon: <Frown style={{ width: 20, height: 20 }} />, label: 'Muito difícil', color: 'var(--danger)' },
+              { key: 'medium', icon: <Meh style={{ width: 20, height: 20 }} />, label: 'Médio', color: 'var(--warning)' },
+              { key: 'easy', icon: <Smile style={{ width: 20, height: 20 }} />, label: 'Fácil', color: 'var(--success)' },
+            ].map(({ key, icon, label, color }) => (
+              <button
+                key={key}
+                onClick={() => handlePerceived(key)}
+                style={{
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                  padding: '12px 6px', borderRadius: 12,
+                  background: 'var(--surface)', border: `1px solid var(--border-strong)`,
+                  color, fontSize: 11, fontWeight: 600, cursor: 'pointer',
+                  transition: 'background 120ms, border-color 120ms',
+                }}
+              >
+                {icon}
+                {label}
+              </button>
+            ))}
           </div>
         </div>
       )}

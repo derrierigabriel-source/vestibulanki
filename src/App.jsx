@@ -23,6 +23,7 @@ function useTheme() {
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light')
     localStorage.setItem('theme', dark ? 'dark' : 'light')
   }, [dark])
 
@@ -38,6 +39,20 @@ const NAV = [
   { to: '/stats', label: 'Estatísticas', icon: BarChart2 },
 ]
 
+function Brand({ size = 28, fontSize = 15 }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div className="side__mark" style={{ width: size, height: size }}>
+        <BookOpen style={{ width: size * 0.5, height: size * 0.5 }} />
+      </div>
+      <span className="side__word" style={{ fontSize }}
+        style={{ fontFamily: 'Instrument Serif, serif', fontWeight: 700, fontSize, letterSpacing: '-0.02em', color: 'var(--fg-1)' }}>
+        VestibulAnki
+      </span>
+    </div>
+  )
+}
+
 function AppLayout({ children }) {
   const [dark, setDark] = useTheme()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -46,121 +61,102 @@ function AppLayout({ children }) {
 
   useEffect(() => setMobileOpen(false), [location.pathname])
 
+  const avatar = (
+    <div className="side__avatar">
+      {user?.photoURL
+        ? <img src={user.photoURL} alt="" />
+        : (user?.displayName || user?.email || '?')[0].toUpperCase()
+      }
+    </div>
+  )
+
   return (
-    <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex">
-      {/* Sidebar (desktop) */}
-      <aside className="hidden md:flex flex-col w-56 bg-white dark:bg-stone-900 border-r border-stone-200 dark:border-stone-800 h-screen sticky top-0 flex-shrink-0">
-        <div className="px-5 py-5 border-b border-stone-100 dark:border-stone-800">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
-              <BookOpen className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-bold text-stone-900 dark:text-white" style={{ fontFamily: 'Instrument Serif, serif' }}>
-              FlashCard Pro
-            </span>
+    <div className="app">
+      {/* Sidebar */}
+      <aside className="side">
+        <div className="side__brand">
+          <div className="side__mark">
+            <BookOpen style={{ width: 14, height: 14 }} />
           </div>
+          <span className="side__word" style={{ fontFamily: 'Instrument Serif, serif' }}>
+            VestibulAnki
+          </span>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="side__nav">
           {NAV.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                  isActive
-                    ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300'
-                    : 'text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800 hover:text-stone-900 dark:hover:text-white'
-                }`
-              }
+              end={to === '/'}
+              className={({ isActive }) => `side__item${isActive ? ' is-active' : ''}`}
             >
-              <Icon className="w-4 h-4 flex-shrink-0" />
+              <span className="side__ico"><Icon style={{ width: 15, height: 15 }} /></span>
               {label}
             </NavLink>
           ))}
         </nav>
 
-        <div className="px-3 py-4 border-t border-stone-100 dark:border-stone-800 space-y-1">
-          <button
-            onClick={() => setDark((d) => !d)}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
-          >
-            {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+        <div className="side__foot">
+          <button className="side__btn" onClick={() => setDark(d => !d)}>
+            {dark
+              ? <Sun style={{ width: 14, height: 14 }} />
+              : <Moon style={{ width: 14, height: 14 }} />}
             {dark ? 'Modo claro' : 'Modo escuro'}
           </button>
           {user && (
-            <button
-              onClick={signOut}
-              className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-stone-600 dark:text-stone-400 hover:bg-red-50 dark:hover:bg-red-900/10 hover:text-red-600 transition-colors"
-            >
-              <LogOut className="w-4 h-4" /> Sair
+            <button className="side__btn side__btn--danger" onClick={signOut}>
+              <LogOut style={{ width: 14, height: 14 }} /> Sair
             </button>
           )}
           {user && (
-            <div className="flex items-center gap-2 px-3 py-2">
-              {user.photoURL ? (
-                <img src={user.photoURL} alt="" className="w-6 h-6 rounded-full" />
-              ) : (
-                <div className="w-6 h-6 rounded-full bg-teal-200 dark:bg-teal-800 flex items-center justify-center text-xs font-bold text-teal-700 dark:text-teal-300">
-                  {(user.displayName || user.email || '?')[0].toUpperCase()}
-                </div>
-              )}
-              <span className="text-xs text-stone-500 dark:text-stone-400 truncate">
-                {user.displayName || user.email}
-              </span>
+            <div className="side__user">
+              {avatar}
+              <span className="side__userName">{user.displayName || user.email}</span>
             </div>
           )}
         </div>
       </aside>
 
-      {/* Mobile header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between px-4 h-14">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 bg-teal-600 rounded-lg flex items-center justify-center">
-            <BookOpen className="w-3.5 h-3.5 text-white" />
+      {/* Mobile top header */}
+      <div className="mob-header">
+        <div className="mob-brand">
+          <div className="mob-mark">
+            <BookOpen style={{ width: 14, height: 14 }} />
           </div>
-          <span className="font-bold text-stone-900 dark:text-white text-sm" style={{ fontFamily: 'Instrument Serif, serif' }}>
-            FlashCard Pro
-          </span>
+          <span className="mob-word" style={{ fontFamily: 'Instrument Serif, serif' }}>VestibulAnki</span>
         </div>
-        <div className="flex items-center gap-2">
-          <button onClick={() => setDark((d) => !d)} className="p-2 text-stone-500 hover:text-stone-700 dark:hover:text-stone-300">
-            {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+        <div className="mob-actions">
+          <button className="mob-btn" onClick={() => setDark(d => !d)}>
+            {dark ? <Sun style={{ width: 16, height: 16 }} /> : <Moon style={{ width: 16, height: 16 }} />}
           </button>
-          <button onClick={() => setMobileOpen((o) => !o)} className="p-2 text-stone-500">
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          <button className="mob-btn" onClick={() => setMobileOpen(o => !o)}>
+            {mobileOpen ? <X style={{ width: 18, height: 18 }} /> : <Menu style={{ width: 18, height: 18 }} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile menu overlay */}
+      {/* Mobile drawer */}
       {mobileOpen && (
-        <div className="md:hidden fixed inset-0 z-30 bg-black/50 backdrop-blur-sm pt-14" onClick={() => setMobileOpen(false)}>
-          <div className="bg-white dark:bg-stone-900 w-56 h-full flex flex-col" onClick={(e) => e.stopPropagation()}>
-            <nav className="flex-1 px-3 py-4 space-y-1">
+        <div className="mob-drawer" onClick={() => setMobileOpen(false)}>
+          <div className="mob-drawer__panel" onClick={e => e.stopPropagation()}>
+            <nav className="mob-drawer__nav">
               {NAV.map(({ to, label, icon: Icon }) => (
                 <NavLink
                   key={to}
                   to={to}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                      isActive
-                        ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-300'
-                        : 'text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800'
-                    }`
-                  }
+                  end={to === '/'}
+                  className={({ isActive }) => `side__item${isActive ? ' is-active' : ''}`}
                 >
-                  <Icon className="w-4 h-4" /> {label}
+                  <span className="side__ico"><Icon style={{ width: 15, height: 15 }} /></span>
+                  {label}
                 </NavLink>
               ))}
             </nav>
-            <div className="px-3 py-4 border-t border-stone-100 dark:border-stone-800">
+            <div className="mob-drawer__foot">
               {user && (
-                <button
-                  onClick={signOut}
-                  className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
-                >
-                  <LogOut className="w-4 h-4" /> Sair
+                <button className="side__btn side__btn--danger" onClick={signOut} style={{ width: '100%' }}>
+                  <LogOut style={{ width: 14, height: 14 }} /> Sair
                 </button>
               )}
             </div>
@@ -168,28 +164,24 @@ function AppLayout({ children }) {
         </div>
       )}
 
-      {/* Main content */}
-      <main className="flex-1 min-w-0 md:h-screen md:overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-4 py-6 pt-20 md:pt-6 pb-24 md:pb-6">
+      {/* Main */}
+      <main className="app__main" style={{ paddingTop: 'clamp(72px, 8vw, 28px)' }}>
+        <div style={{ maxWidth: 960, margin: '0 auto' }}>
           {children}
         </div>
       </main>
 
-      {/* Bottom nav (mobile) */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800 flex safe-area-pb">
+      {/* Bottom nav */}
+      <nav className="botnav safe-area-pb">
         {NAV.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
-            className={({ isActive }) =>
-              `flex-1 flex flex-col items-center gap-0.5 py-2.5 text-xs font-medium transition-colors ${
-                isActive
-                  ? 'text-teal-600 dark:text-teal-400'
-                  : 'text-stone-400 hover:text-stone-600 dark:hover:text-stone-300'
-              }`
-            }
+            end={to === '/'}
+            className={({ isActive }) => `botnav__item${isActive ? ' is-active' : ''}`}
           >
-            <Icon className="w-5 h-5" />
+            <Icon style={{ width: 18, height: 18 }} />
+            <span style={{ fontSize: 10 }}>{label.split(' ')[0]}</span>
           </NavLink>
         ))}
       </nav>

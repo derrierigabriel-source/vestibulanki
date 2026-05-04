@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Plus, Search, Layers } from 'lucide-react'
 import DeckCard from './DeckCard'
 import DeckForm from './DeckForm'
-import AICardGenerator from './AICardGenerator'
 import { useDecks } from '../../hooks/useDecks'
 
 export default function DeckList({ onStudy }) {
@@ -12,7 +11,6 @@ export default function DeckList({ onStudy }) {
   const [editingDeck, setEditingDeck] = useState(null)
   const [editingCards, setEditingCards] = useState([])
   const [cardRefreshKey, setCardRefreshKey] = useState(0)
-  const [aiDeck, setAiDeck] = useState(null)
 
   const filtered = decks.filter(
     (d) =>
@@ -63,15 +61,6 @@ export default function DeckList({ onStudy }) {
     setCardRefreshKey((k) => k + 1)
     setEditingDeck(null)
     setEditingCards([])
-  }
-
-  const handleAIGenerated = async (cards) => {
-    for (const card of cards) {
-      const { _key, id, ...cardData } = card
-      await addCard(aiDeck.id, cardData)
-    }
-    setCardRefreshKey((k) => k + 1)
-    setAiDeck(null)
   }
 
   const handleDelete = async (deckId) => {
@@ -136,7 +125,6 @@ export default function DeckList({ onStudy }) {
               onDelete={handleDelete}
               getCards={getDeckCards}
               refreshKey={cardRefreshKey}
-              onAIGenerate={(deck) => setAiDeck(deck)}
             />
           ))}
         </div>
@@ -158,13 +146,6 @@ export default function DeckList({ onStudy }) {
         />
       )}
 
-      {aiDeck && (
-        <AICardGenerator
-          deckName={aiDeck.name}
-          onGenerated={handleAIGenerated}
-          onClose={() => setAiDeck(null)}
-        />
-      )}
-    </>
+</>
   )
 }

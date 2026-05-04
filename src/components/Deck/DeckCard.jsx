@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { BookOpen, MoreVertical, Play, Edit2, Trash2, AlertCircle, Clock, CheckCircle, Sparkles } from 'lucide-react'
+import { BookOpen, MoreVertical, Play, Edit2, Trash2, AlertCircle, Clock, CheckCircle } from 'lucide-react'
 
-export default function DeckCard({ deck, onStudy, onEdit, onDelete, getCards, refreshKey, onAIGenerate }) {
+export default function DeckCard({ deck, onStudy, onEdit, onDelete, getCards, refreshKey }) {
   const [cardCount, setCardCount] = useState(0)
   const [queueStats, setQueueStats] = useState({ urgent: 0, soon: 0, consolidated: 0 })
   const [menuOpen, setMenuOpen] = useState(false)
@@ -55,13 +55,7 @@ export default function DeckCard({ deck, onStudy, onEdit, onDelete, getCards, re
                 >
                   <Edit2 className="w-3.5 h-3.5" /> Editar
                 </button>
-                <button
-                  onClick={() => { onAIGenerate(deck); setMenuOpen(false) }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-colors"
-                >
-                  <Sparkles className="w-3.5 h-3.5" /> Gerar com IA
-                </button>
-                <button
+<button
                   onClick={() => { onDelete(deck.id); setMenuOpen(false) }}
                   className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                 >
@@ -116,23 +110,14 @@ export default function DeckCard({ deck, onStudy, onEdit, onDelete, getCards, re
           </div>
         )}
 
-        <div className="flex gap-2">
-          <button
-            onClick={() => onAIGenerate(deck)}
-            className="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl text-sm font-semibold border border-violet-300 dark:border-violet-700 text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition-all active:scale-95"
-            title="Gerar cards com IA"
-          >
-            <Sparkles className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => onStudy(deck)}
-            disabled={cardCount === 0}
-            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ backgroundColor: deck.color }}
-          >
-            <Play className="w-4 h-4" /> Estudar
-          </button>
-        </div>
+        <button
+          onClick={() => onStudy(deck)}
+          disabled={cardCount === 0}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
+          style={{ backgroundColor: deck.color }}
+        >
+          <Play className="w-4 h-4" /> Estudar
+        </button>
       </div>
     </div>
   )

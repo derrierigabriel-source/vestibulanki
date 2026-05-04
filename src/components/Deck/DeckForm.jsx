@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
-import { X, Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react'
+import { useState } from 'react'
+import { X, Plus, Trash2, ChevronDown, ChevronUp, Sparkles } from 'lucide-react'
+import AICardGenerator from './AICardGenerator'
 
 const COLORS = [
   '#3B82F6', '#F97316', '#8B5CF6', '#0D9488', '#EF4444',
@@ -25,6 +26,7 @@ export default function DeckForm({ deck, existingCards = [], onSubmit, onClose }
   const [cards, setCards] = useState(existingCards.length ? existingCards.map(c => ({ ...c, _key: Math.random() })) : [emptyCard()])
   const [expandedIdx, setExpandedIdx] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [showAI, setShowAI] = useState(false)
   const isEdit = !!deck
 
   const updateCard = (idx, field, value) => {
@@ -67,8 +69,27 @@ export default function DeckForm({ deck, existingCards = [], onSubmit, onClose }
     setLoading(false)
   }
 
+  const handleAIGenerated = (generatedCards) => {
+    const mapped = generatedCards.map((c) => ({ ...c, _key: Math.random() }))
+    setCards((prev) => {
+      // Remove o card vazio inicial se ainda não foi preenchido
+      const filtered = prev.filter((c) => c.front.trim() || c.back.trim())
+      return [...filtered, ...mapped]
+    })
+    setExpandedIdx(-1)
+    setShowAI(false)
+  }
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <>
+    {showAI && (
+      <AICardGenerator
+        deckName={name || 'novo baralho'}
+        onGenerated={handleAIGenerated}
+        onClose={() => setShowAI(false)}
+      />
+    )}
+    <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <div className="bg-white dark:bg-stone-900 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-stone-200 dark:border-stone-800">
@@ -139,13 +160,23 @@ export default function DeckForm({ deck, existingCards = [], onSubmit, onClose }
                 <label className="text-sm font-medium text-stone-700 dark:text-stone-300">
                   Cards ({cards.length})
                 </label>
-                <button
-                  type="button"
-                  onClick={addCard}
-                  className="flex items-center gap-1 text-xs text-teal-600 hover:text-teal-700 font-medium"
-                >
-                  <Plus className="w-3.5 h-3.5" /> Adicionar card
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAI(true)}
+                    className="flex items-center gap-1 text-xs text-violet-600 dark:text-violet-400 hover:text-violet-700 font-medium"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" /> Gerar com IA
+                  </button>
+                  <span className="text-stone-300 dark:text-stone-600">|</span>
+                  <button
+                    type="button"
+                    onClick={addCard}
+                    className="flex items-center gap-1 text-xs text-teal-600 hover:text-teal-700 font-medium"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Adicionar card
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-2">
@@ -281,5 +312,6 @@ export default function DeckForm({ deck, existingCards = [], onSubmit, onClose }
         </form>
       </div>
     </div>
+    </>
   )
 }

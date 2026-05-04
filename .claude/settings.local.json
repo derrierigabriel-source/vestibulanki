@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where node:*)",
+      "Read(//c/Program Files/**)",
+      "Read(//c/Users/User/AppData/Roaming/**)",
+      "Read(//c/Users/User/**)",
+      "Bash(powershell.exe -Command \"node --version; npm --version\")",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\User\\\\Downloads\\\\projetos\\\\flashcard-app\" -Recurse -Force)",
+      "Bash(Select-Object FullName)"
+    ]
+  }
+}

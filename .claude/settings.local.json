@@ -7,7 +7,9 @@
       "Read(//c/Users/User/**)",
       "Bash(powershell.exe -Command \"node --version; npm --version\")",
       "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\User\\\\Downloads\\\\projetos\\\\flashcard-app\" -Recurse -Force)",
-      "Bash(Select-Object FullName)"
+      "Bash(Select-Object FullName)",
+      "Bash(dir \"c:\\\\Users\\\\User\\\\Downloads\\\\projetos\\\\flashcard-app\\\\Revisaí Design System \\(1\\)\")",
+      "Bash(dir \"c:\\\\Users\\\\User\\\\Downloads\\\\projetos\\\\flashcard-app\" /b)"
     ]
   }
 }

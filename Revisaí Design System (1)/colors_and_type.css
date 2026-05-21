@@ -1,0 +1,219 @@
+/* ============================================================
+   Revisaí Design System — Foundation tokens
+   Dark-first, Linear/Vercel-inspired surfaces with terracotta
+   accent. Light mode flips surfaces while keeping the accent.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.css');
+
+:root {
+  /* ---- Brand ---- */
+  --brand-terracotta: #D45C3A;       /* Primary — quiet, elegant */
+  --brand-terracotta-light: #E07A5A; /* Hover */
+  --brand-terracotta-pale: #F2E8E4;  /* Light-mode tint */
+  --brand-ink: #1B2A4A;              /* Logo navy */
+
+  /* ---- Accent system ---- */
+  --accent: var(--brand-terracotta);
+  --accent-hover: var(--brand-terracotta-light);
+  --accent-fg: #FFFFFF;
+  --accent-soft: rgba(212, 92, 58, 0.12);
+  --accent-ring: rgba(212, 92, 58, 0.40);
+  --accent-glow: 0 0 24px rgba(212, 92, 58, 0.35);
+
+  /* Secondary accent (kept from original brand for charts) */
+  --accent-2: #0D9488;               /* Teal — secondary / charts */
+  --accent-2-soft: rgba(13, 148, 136, 0.14);
+
+  /* ---- Surfaces (dark — default) ---- */
+  --bg: #08090E;                     /* App background */
+  --bg-raised: #0B0C13;              /* Subtle lift */
+  --surface: #0F1017;                /* Cards / panels */
+  --surface-2: #14151E;              /* Hover state on cards */
+  --surface-overlay: rgba(15, 16, 23, 0.72); /* Glass / modals */
+
+  /* ---- Borders ---- */
+  --border: #1E2030;                 /* Default card border */
+  --border-strong: #2A2D40;          /* Inputs, dividers */
+  --border-subtle: #161826;          /* Inner / faint */
+
+  /* ---- Text ---- */
+  --fg-1: #F8FAFC;                   /* Primary text */
+  --fg-2: #CBD5E1;                   /* Body */
+  --fg-3: #94A3B8;                   /* Secondary / labels */
+  --fg-4: #475569;                   /* Tertiary / disabled */
+  --fg-onAccent: #FFFFFF;
+
+  /* ---- Semantic ---- */
+  --success: #10B981;
+  --success-soft: rgba(16, 185, 129, 0.14);
+  --warning: #F59E0B;
+  --warning-soft: rgba(245, 158, 11, 0.14);
+  --danger:  #EF4444;
+  --danger-soft: rgba(239, 68, 68, 0.14);
+  --info:    #3B82F6;
+
+  /* ---- Queue colors (study system) ---- */
+  --queue-urgent: #EF4444;
+  --queue-soon:   #F59E0B;
+  --queue-consolidated: #10B981;
+
+  /* ---- Type ---- */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Geist', 'Inter', system-ui, sans-serif;  /* Display & H1 — técnica, contemporânea */
+  --font-serif: 'Instrument Serif', Georgia, serif;          /* Card faces */
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  /* Scale (mobile-first base) */
+  --fs-display: 56px;
+  --fs-h1: 36px;
+  --fs-h2: 28px;
+  --fs-h3: 22px;
+  --fs-h4: 18px;
+  --fs-body: 15px;
+  --fs-sm: 13px;
+  --fs-xs: 11px;
+
+  --lh-tight: 1.15;
+  --lh-snug:  1.35;
+  --lh-body:  1.55;
+  --lh-loose: 1.7;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.04em;
+  --tracking-eyebrow: 0.10em;
+
+  /* ---- Radii ---- */
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;     /* Default card */
+  --r-xl: 20px;     /* Hero card */
+  --r-2xl: 28px;
+  --r-full: 9999px;
+
+  /* ---- Spacing scale ---- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* ---- Shadows / elevation ---- */
+  --shadow-1: 0 1px 0 rgba(255,255,255,0.02) inset, 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-2: 0 1px 0 rgba(255,255,255,0.03) inset, 0 8px 24px rgba(0,0,0,0.45);
+  --shadow-3: 0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 60px rgba(0,0,0,0.55);
+  --shadow-glow: 0 0 0 1px var(--accent-ring), 0 12px 40px rgba(212,92,58,0.25);
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-flip: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 500ms;
+
+  /* ---- Mesh / glass ---- */
+  --mesh-gradient:
+    radial-gradient(1200px 600px at 0% -10%,  rgba(212,92,58,0.18), transparent 60%),
+    radial-gradient(900px  500px at 100% 10%, rgba(13,148,136,0.10), transparent 60%),
+    radial-gradient(700px  400px at 30% 110%, rgba(108,99,255,0.08), transparent 60%);
+  --glass-bg: rgba(15, 16, 23, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(20px) saturate(140%);
+}
+
+/* ============================================================
+   Light mode override
+   ============================================================ */
+[data-theme="light"], .light {
+  --bg: #F8FAFC;
+  --bg-raised: #FFFFFF;
+  --surface: #FFFFFF;
+  --surface-2: #F1F5F9;
+  --surface-overlay: rgba(255, 255, 255, 0.75);
+
+  --border: #E2E8F0;
+  --border-strong: #CBD5E1;
+  --border-subtle: #EEF2F7;
+
+  --fg-1: #0F172A;
+  --fg-2: #334155;
+  --fg-3: #64748B;
+  --fg-4: #94A3B8;
+
+  --accent-soft: rgba(212, 92, 58, 0.10);
+  --shadow-1: 0 1px 2px rgba(15,23,42,0.06);
+  --shadow-2: 0 4px 16px rgba(15,23,42,0.08);
+  --shadow-3: 0 24px 48px rgba(15,23,42,0.12);
+
+  --glass-bg: rgba(255, 255, 255, 0.70);
+  --glass-border: rgba(15, 23, 42, 0.08);
+}
+
+/* ============================================================
+   Element defaults — semantic tokens applied
+   ============================================================ */
+html, body {
+  background: var(--bg);
+  color: var(--fg-1);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+}
+
+h1 { font-family: var(--font-display); font-size: var(--fs-h1); font-weight: var(--fw-bold); line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); color: var(--fg-1); }
+.display { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.025em; line-height: 1.02; }
+h2 { font-size: var(--fs-h2); font-weight: var(--fw-bold); line-height: var(--lh-tight); letter-spacing: var(--tracking-tight); color: var(--fg-1); }
+h3 { font-size: var(--fs-h3); font-weight: var(--fw-medium); line-height: var(--lh-snug); color: var(--fg-1); }
+h4 { font-size: var(--fs-h4); font-weight: var(--fw-medium); line-height: var(--lh-snug); color: var(--fg-1); }
+p  { color: var(--fg-2); }
+small { font-size: var(--fs-sm); color: var(--fg-3); }
+code, pre { font-family: var(--font-mono); font-size: 0.92em; }
+
+.eyebrow {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--fg-3);
+  font-weight: var(--fw-medium);
+}
+
+.serif-display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent-soft);
+  color: var(--fg-1);
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--accent-ring);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--fg-4); }

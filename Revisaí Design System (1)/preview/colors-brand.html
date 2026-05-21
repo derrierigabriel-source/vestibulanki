@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8" />
+<title>Revisaí — Color: Brand & Surfaces</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin: 0; padding: 20px; background: var(--bg); }
+  .row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
+  .swatch { border-radius: 12px; padding: 14px; min-height: 96px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--border); position: relative; overflow: hidden; }
+  .swatch .name { font-size: 11px; font-weight: 600; color: var(--fg-1); }
+  .swatch .hex { font-family: var(--font-mono); font-size: 10px; color: var(--fg-3); }
+  .light-block { background: #F8FAFC !important; border-color: #E2E8F0 !important; }
+  .light-block .name, .light-block .hex { color: #0F172A; }
+</style>
+</head><body>
+<div class="row">
+  <div class="swatch" style="background:#D45C3A;"><span class="name" style="color:#fff">Terracotta</span><span class="hex" style="color:rgba(255,255,255,.85)">#D45C3A</span></div>
+  <div class="swatch" style="background:#E07A5A;"><span class="name" style="color:#fff">Light</span><span class="hex" style="color:rgba(255,255,255,.85)">#E07A5A</span></div>
+  <div class="swatch light-block" style="background:#F2E8E4;"><span class="name">Pale</span><span class="hex">#F2E8E4</span></div>
+  <div class="swatch" style="background:#0D9488;"><span class="name" style="color:#fff">Teal</span><span class="hex" style="color:rgba(255,255,255,.85)">#0D9488</span></div>
+  <div class="swatch" style="background:#1B2A4A;"><span class="name" style="color:#fff">Ink</span><span class="hex" style="color:rgba(255,255,255,.85)">#1B2A4A</span></div>
+  <div class="swatch" style="background:#08090E;"><span class="name">BG</span><span class="hex">#08090E</span></div>
+</div>
+</body></html>

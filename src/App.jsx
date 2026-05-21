@@ -5,6 +5,7 @@ import { useAuth } from './context/AuthContext'
 import ProtectedRoute from './components/Auth/ProtectedRoute'
 import Login from './components/Auth/Login'
 import Home from './pages/Home'
+import HomeApp from './pages/HomeApp'
 import Decks from './pages/Decks'
 import Study from './pages/Study'
 import Vestibular from './pages/Vestibular'
@@ -31,7 +32,7 @@ function useTheme() {
 }
 
 const NAV = [
-  { to: '/', label: 'Início', icon: House },
+  { to: '/home', label: 'Início', icon: House },
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/decks', label: 'Baralhos', icon: Layers },
   { to: '/study', label: 'Estudar', icon: BookOpen },
@@ -88,7 +89,7 @@ function AppLayout({ children }) {
             <NavLink
               key={to}
               to={to}
-              end={to === '/'}
+              end={to === '/home'}
               className={({ isActive }) => `side__item${isActive ? ' is-active' : ''}`}
             >
               <span className="side__ico"><Icon style={{ width: 15, height: 15 }} /></span>
@@ -145,7 +146,7 @@ function AppLayout({ children }) {
                 <NavLink
                   key={to}
                   to={to}
-                  end={to === '/'}
+                  end={to === '/home'}
                   className={({ isActive }) => `side__item${isActive ? ' is-active' : ''}`}
                 >
                   <span className="side__ico"><Icon style={{ width: 15, height: 15 }} /></span>
@@ -177,7 +178,7 @@ function AppLayout({ children }) {
           <NavLink
             key={to}
             to={to}
-            end={to === '/'}
+            end={to === '/home'}
             className={({ isActive }) => `botnav__item${isActive ? ' is-active' : ''}`}
           >
             <Icon style={{ width: 18, height: 18 }} />
@@ -202,6 +203,7 @@ export default function App() {
               <ProtectedRoute>
                 <AppLayout>
                   <Routes>
+                    <Route path="/home" element={<HomeApp />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/decks" element={<Decks />} />
                     <Route path="/study" element={<Study />} />

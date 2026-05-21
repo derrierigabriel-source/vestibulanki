@@ -1,0 +1,18 @@
+<!doctype html>
+<html><head><meta charset="utf-8" /><title>Text</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin:0; padding:20px; background: var(--bg); font-family: var(--font-sans); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .row { display:flex; align-items:center; justify-content:space-between; padding: 10px 14px; border-radius: 10px; background: var(--surface); border:1px solid var(--border); }
+  .swatch { width:14px;height:14px;border-radius:4px; display:inline-block; margin-right:10px; vertical-align:middle; }
+  .label { font-size: 13px; }
+  .meta { font-family: var(--font-mono); font-size:11px; color: var(--fg-3); }
+</style></head><body>
+<div class="grid">
+  <div class="row"><span class="label" style="color:#F8FAFC"><span class="swatch" style="background:#F8FAFC"></span>Primary text</span><span class="meta">#F8FAFC · fg-1</span></div>
+  <div class="row"><span class="label" style="color:#CBD5E1"><span class="swatch" style="background:#CBD5E1"></span>Body</span><span class="meta">#CBD5E1 · fg-2</span></div>
+  <div class="row"><span class="label" style="color:#94A3B8"><span class="swatch" style="background:#94A3B8"></span>Secondary</span><span class="meta">#94A3B8 · fg-3</span></div>
+  <div class="row"><span class="label" style="color:#475569"><span class="swatch" style="background:#475569"></span>Tertiary</span><span class="meta">#475569 · fg-4</span></div>
+</div>
+</body></html>

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8" /><title>Surfaces</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin:0; padding:20px; background: var(--bg); }
+  .stack { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; }
+  .tile { border-radius:12px; padding:12px; height:96px; display:flex; flex-direction:column; justify-content:space-between; }
+  .label { font-size:11px; font-weight:600; color: var(--fg-1); }
+  .hex { font-family: var(--font-mono); font-size: 10px; color: var(--fg-3); }
+</style>
+</head><body>
+<div class="stack">
+  <div class="tile" style="background:#08090E;border:1px solid #1E2030;"><span class="label">bg</span><span class="hex">#08090E</span></div>
+  <div class="tile" style="background:#0B0C13;border:1px solid #1E2030;"><span class="label">bg-raised</span><span class="hex">#0B0C13</span></div>
+  <div class="tile" style="background:#0F1017;border:1px solid #1E2030;"><span class="label">surface</span><span class="hex">#0F1017</span></div>
+  <div class="tile" style="background:#14151E;border:1px solid #2A2D40;"><span class="label">surface-2</span><span class="hex">#14151E</span></div>
+  <div class="tile" style="background:#1E2030;border:1px solid #2A2D40;"><span class="label">border</span><span class="hex">#1E2030</span></div>
+</div>
+</body></html>

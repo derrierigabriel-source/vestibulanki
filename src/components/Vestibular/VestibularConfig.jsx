@@ -7,16 +7,15 @@ import { getCards } from '../../services/cardService'
 export default function VestibularConfig({ onStart }) {
   const { user } = useAuth()
   const [decks, setDecks] = useState([])
-  const [selected, setSelected] = useState({}) // deckId -> count
-  const [timeLimit, setTimeLimit] = useState(300) // minutes
+  const [selected, setSelected] = useState({})
+  const [timeLimit, setTimeLimit] = useState(300)
   const [loading, setLoading] = useState(true)
-  const [deckInfo, setDeckInfo] = useState({}) // deckId -> { multipleCount }
+  const [deckInfo, setDeckInfo] = useState({})
 
   useEffect(() => {
     const load = async () => {
       const data = await getDecks(user.uid)
       setDecks(data)
-      // Count multiple choice cards per deck
       const info = {}
       for (const d of data) {
         const cards = await getCards(user.uid, d.id)
@@ -63,40 +62,55 @@ export default function VestibularConfig({ onStart }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-4 border-teal-600 border-t-transparent rounded-full animate-spin" />
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 0' }}>
+        <div style={{
+          width: 32, height: 32, borderRadius: '50%',
+          border: '3px solid var(--border-strong)',
+          borderTopColor: 'var(--accent)',
+          animation: 'spin 0.7s linear infinite',
+        }} />
+        <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
       </div>
     )
   }
 
   return (
-    <div className="max-w-xl mx-auto w-full">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-12 h-12 bg-teal-100 dark:bg-teal-900/30 rounded-2xl flex items-center justify-center">
-          <GraduationCap className="w-6 h-6 text-teal-600" />
+    <div style={{ maxWidth: 560, margin: '0 auto', width: '100%' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
+        <div style={{
+          width: 48, height: 48, borderRadius: 'var(--r-xl)',
+          background: 'var(--accent-soft)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+        }}>
+          <GraduationCap style={{ width: 22, height: 22, color: 'var(--accent)' }} />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-stone-900 dark:text-white">Modo Vestibular</h2>
-          <p className="text-sm text-stone-500 dark:text-stone-400">Configure seu simulado</p>
+          <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: 'var(--fg-1)' }}>Modo Vestibular</h2>
+          <p style={{ margin: '2px 0 0', fontSize: 13, color: 'var(--fg-3)' }}>Configure seu simulado</p>
         </div>
       </div>
 
       {/* Time limit */}
-      <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-4 mb-4">
-        <div className="flex items-center gap-2 mb-3">
-          <Clock className="w-4 h-4 text-stone-400" />
-          <span className="text-sm font-medium text-stone-700 dark:text-stone-300">Tempo total</span>
+      <div style={{
+        background: 'var(--surface)', border: '1px solid var(--border-strong)',
+        borderRadius: 'var(--r-xl)', padding: 16, marginBottom: 12,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <Clock style={{ width: 14, height: 14, color: 'var(--fg-4)' }} />
+          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--fg-2)' }}>Tempo total</span>
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {[60, 120, 180, 240, 300].map((t) => (
             <button
               key={t}
               onClick={() => setTimeLimit(t)}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                timeLimit === t
-                  ? 'bg-teal-600 text-white'
-                  : 'border border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:border-teal-400'
-              }`}
+              style={{
+                padding: '6px 16px', borderRadius: 'var(--r-md)', fontSize: 13, fontWeight: 500,
+                border: `1px solid ${timeLimit === t ? 'var(--accent)' : 'var(--border-strong)'}`,
+                background: timeLimit === t ? 'var(--accent-soft)' : 'transparent',
+                color: timeLimit === t ? 'var(--accent)' : 'var(--fg-3)',
+                cursor: 'pointer', transition: 'all 120ms',
+              }}
             >
               {t / 60}h
             </button>
@@ -105,80 +119,92 @@ export default function VestibularConfig({ onStart }) {
       </div>
 
       {/* Decks */}
-      <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-4 mb-4">
-        <div className="flex items-center gap-2 mb-3">
-          <Hash className="w-4 h-4 text-stone-400" />
-          <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
-            Matérias e questões
-          </span>
+      <div style={{
+        background: 'var(--surface)', border: '1px solid var(--border-strong)',
+        borderRadius: 'var(--r-xl)', padding: 16, marginBottom: 12,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+          <Hash style={{ width: 14, height: 14, color: 'var(--fg-4)' }} />
+          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--fg-2)' }}>Matérias e questões</span>
         </div>
-        <div className="space-y-3">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {decks.map((deck) => {
             const max = deckInfo[deck.id]?.multipleCount || 0
-            const isSelected = selected[deck.id] !== undefined
+            const isSel = selected[deck.id] !== undefined
             return (
               <div
                 key={deck.id}
-                className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${
-                  isSelected
-                    ? 'border-teal-400 bg-teal-50 dark:bg-teal-900/10'
-                    : 'border-stone-200 dark:border-stone-700 hover:border-stone-300 dark:hover:border-stone-600'
-                }`}
                 onClick={() => max > 0 && toggle(deck.id)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12,
+                  padding: '10px 14px', borderRadius: 'var(--r-lg)',
+                  border: `1px solid ${isSel ? 'var(--accent)' : 'var(--border-strong)'}`,
+                  background: isSel ? 'var(--accent-soft)' : 'transparent',
+                  cursor: max > 0 ? 'pointer' : 'default',
+                  opacity: max === 0 ? 0.45 : 1,
+                  transition: 'border-color 120ms, background 120ms',
+                }}
               >
-                <div
-                  className="w-3 h-3 rounded-full flex-shrink-0"
-                  style={{ backgroundColor: deck.color }}
-                />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-stone-800 dark:text-stone-200 truncate">
+                <div style={{ width: 10, height: 10, borderRadius: 99, background: deck.color, flexShrink: 0 }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: 'var(--fg-1)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {deck.name}
                   </p>
-                  <p className="text-xs text-stone-400">
-                    {max} questões disponíveis
-                  </p>
+                  <p style={{ margin: 0, fontSize: 11, color: 'var(--fg-4)' }}>{max} questões disponíveis</p>
                 </div>
-                {isSelected && max > 0 && (
+                {isSel && max > 0 ? (
                   <input
                     type="number"
                     value={selected[deck.id]}
                     onChange={(e) => setCount(deck.id, e.target.value)}
                     onClick={(e) => e.stopPropagation()}
-                    min={1}
-                    max={max}
-                    className="w-14 px-2 py-1 text-sm text-center border border-teal-300 dark:border-teal-700 rounded-lg bg-white dark:bg-stone-800 text-stone-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    min={1} max={max}
+                    style={{
+                      width: 56, padding: '4px 8px', textAlign: 'center',
+                      fontSize: 13, fontWeight: 600,
+                      border: '1px solid var(--accent)', borderRadius: 'var(--r-sm)',
+                      background: 'var(--surface-2)', color: 'var(--fg-1)', outline: 'none',
+                    }}
                   />
-                )}
-                {max === 0 && (
-                  <span className="text-xs text-stone-400">Sem MC</span>
-                )}
+                ) : max === 0 ? (
+                  <span style={{ fontSize: 11, color: 'var(--fg-4)' }}>Sem MC</span>
+                ) : null}
               </div>
             )
           })}
         </div>
       </div>
 
-      {/* Summary + Start */}
-      <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-4 flex items-center justify-between mb-4">
+      {/* Summary */}
+      <div style={{
+        background: 'var(--surface-2)', borderRadius: 'var(--r-xl)', padding: 16,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14,
+      }}>
         <div>
-          <p className="text-sm text-stone-500 dark:text-stone-400">Total</p>
-          <p className="text-xl font-bold text-stone-900 dark:text-white">
+          <p style={{ margin: 0, fontSize: 12, color: 'var(--fg-4)' }}>Total</p>
+          <p style={{ margin: '2px 0 0', fontSize: 18, fontWeight: 700, color: 'var(--fg-1)' }}>
             {totalQuestions} questões · {timeLimit / 60}h
           </p>
         </div>
-        <div className="text-right text-xs text-stone-400">
-          <p>Acerto: +1,00</p>
-          <p>Erro: −0,25</p>
-          <p>Branco: 0,00</p>
+        <div style={{ textAlign: 'right', fontSize: 11, lineHeight: 1.8 }}>
+          <p style={{ margin: 0, color: 'var(--success)' }}>Acerto: +1,00</p>
+          <p style={{ margin: 0, color: 'var(--danger)' }}>Erro: −0,25</p>
+          <p style={{ margin: 0, color: 'var(--fg-4)' }}>Branco: 0,00</p>
         </div>
       </div>
 
       <button
         onClick={handleStart}
         disabled={totalQuestions === 0}
-        className="w-full flex items-center justify-center gap-2 py-3.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        className="btn-primary"
+        style={{
+          width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+          padding: '13px 24px',
+          opacity: totalQuestions === 0 ? 0.4 : 1,
+          cursor: totalQuestions === 0 ? 'not-allowed' : 'pointer',
+        }}
       >
-        Iniciar simulado <ChevronRight className="w-4 h-4" />
+        Iniciar simulado <ChevronRight style={{ width: 16, height: 16 }} />
       </button>
     </div>
   )

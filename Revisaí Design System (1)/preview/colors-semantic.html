@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="utf-8" /><title>Semantic</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin:0; padding:20px; background: var(--bg); font-family: var(--font-sans); }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .pill { display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:12px; border:1px solid; }
+  .dot { width:10px;height:10px;border-radius:99px; }
+  .name { font-size:12px;font-weight:600;color:var(--fg-1); }
+  .hex { font-family:var(--font-mono); font-size:11px; margin-left:auto; }
+</style></head><body>
+<div class="grid">
+  <div class="pill" style="background:rgba(16,185,129,.10); border-color:rgba(16,185,129,.32);"><span class="dot" style="background:#10B981"></span><span class="name">Success</span><span class="hex" style="color:#10B981">#10B981</span></div>
+  <div class="pill" style="background:rgba(245,158,11,.10); border-color:rgba(245,158,11,.32);"><span class="dot" style="background:#F59E0B"></span><span class="name">Warning</span><span class="hex" style="color:#F59E0B">#F59E0B</span></div>
+  <div class="pill" style="background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.32);"><span class="dot" style="background:#EF4444"></span><span class="name">Danger</span><span class="hex" style="color:#EF4444">#EF4444</span></div>
+  <div class="pill" style="background:rgba(59,130,246,.10); border-color:rgba(59,130,246,.32);"><span class="dot" style="background:#3B82F6"></span><span class="name">Info</span><span class="hex" style="color:#3B82F6">#3B82F6</span></div>
+  <div class="pill" style="background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.32);"><span class="dot" style="background:#EF4444"></span><span class="name">Queue · Urgent</span><span class="hex" style="color:#EF4444">#EF4444</span></div>
+  <div class="pill" style="background:rgba(245,158,11,.10); border-color:rgba(245,158,11,.32);"><span class="dot" style="background:#F59E0B"></span><span class="name">Queue · Soon</span><span class="hex" style="color:#F59E0B">#F59E0B</span></div>
+  <div class="pill" style="background:rgba(16,185,129,.10); border-color:rgba(16,185,129,.32);"><span class="dot" style="background:#10B981"></span><span class="name">Queue · Consolidated</span><span class="hex" style="color:#10B981">#10B981</span></div>
+  <div class="pill" style="background:rgba(212,92,58,.10); border-color:rgba(212,92,58,.32);"><span class="dot" style="background:#D45C3A"></span><span class="name">Accent · Streak fire</span><span class="hex" style="color:#D45C3A">#D45C3A</span></div>
+</div>
+</body></html>

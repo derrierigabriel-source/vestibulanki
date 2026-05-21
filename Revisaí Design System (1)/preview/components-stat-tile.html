@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8" /><title>Stat tile</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin:0; padding:20px; background: var(--bg); font-family: var(--font-sans); }
+  .grid { display:grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+  .tile { background: var(--surface); border:1px solid var(--border); border-radius: 16px; padding: 16px; }
+  .top { display:flex; gap:8px; align-items:center; margin-bottom: 8px; font-size: 11px; color: var(--fg-3); font-weight:500; letter-spacing: .04em; text-transform: uppercase; }
+  .num { font-family: var(--font-sans); font-weight:700; font-size: 36px; line-height:1; letter-spacing:-0.02em; color: var(--fg-1); font-variant-numeric: tabular-nums; }
+  .sub { font-size: 11px; color: var(--fg-4); margin-top:6px; }
+  .bar { height:4px; border-radius:99px; background: var(--border-subtle); overflow:hidden; margin-top: 10px; }
+  .bar > div { height:100%; background: linear-gradient(90deg, var(--accent), var(--accent-hover)); border-radius: 99px; }
+</style></head><body>
+<div class="grid">
+  <div class="tile">
+    <div class="top"><span style="color:#F87171">🔥</span> Streak</div>
+    <div class="num">12</div>
+    <div class="sub">dias consecutivos</div>
+  </div>
+  <div class="tile">
+    <div class="top"><span style="color:var(--accent)">●</span> Hoje</div>
+    <div class="num">14<span style="font-size:18px;color:var(--fg-3);font-weight:500;">/20</span></div>
+    <div class="bar"><div style="width:70%"></div></div>
+  </div>
+  <div class="tile">
+    <div class="top"><span style="color:#60A5FA">●</span> ICE médio</div>
+    <div class="num">87%</div>
+    <div class="sub">últimos 7 dias · ↑ 4%</div>
+  </div>
+</div>
+</body></html>

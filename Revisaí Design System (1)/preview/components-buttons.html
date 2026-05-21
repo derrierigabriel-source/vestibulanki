@@ -1,0 +1,23 @@
+<!doctype html><html><head><meta charset="utf-8" /><title>Buttons</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin:0; padding:20px; background: var(--bg); font-family: var(--font-sans); }
+  .row { display:flex; gap: 10px; flex-wrap: wrap; align-items:center; margin-bottom: 12px; }
+  button { font: inherit; cursor: pointer; transition: transform 80ms var(--ease-flip), background 120ms; }
+  button:active { transform: scale(0.97); }
+  .btn-primary { background: var(--accent); color:#fff; border:none; border-radius: 12px; padding: 10px 18px; font-weight:600; font-size: 14px; box-shadow: 0 8px 24px rgba(212,92,58,0.25); }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-secondary { background: var(--surface-2); color: var(--fg-1); border:1px solid var(--border-strong); border-radius:12px; padding: 9px 16px; font-weight:500; font-size:14px; }
+  .btn-ghost { background: transparent; color: var(--fg-2); border:none; padding: 9px 14px; font-weight:500; font-size:14px; border-radius:10px; }
+  .btn-ghost:hover { background: var(--surface-2); color: var(--fg-1); }
+  .btn-danger { background: rgba(239,68,68,0.10); color:#FCA5A5; border:1px solid rgba(239,68,68,0.32); border-radius:12px; padding:9px 16px; font-weight:500; font-size:14px; }
+  .btn-pill { background: var(--accent-soft); color: var(--accent); border:1px solid rgba(212,92,58,0.32); border-radius: 9999px; padding: 6px 14px; font-size:12px; font-weight:600; }
+</style></head><body>
+<div class="row">
+  <button class="btn-primary">Estudar</button>
+  <button class="btn-secondary">Cancelar</button>
+  <button class="btn-ghost">Ver mais</button>
+  <button class="btn-danger">Excluir</button>
+  <button class="btn-pill">+ Novo baralho</button>
+</div>
+</body></html>

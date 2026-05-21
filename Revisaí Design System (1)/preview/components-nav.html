@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8" /><title>Nav</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin:0; padding:18px; background: var(--bg); font-family: var(--font-sans); display:grid; grid-template-columns: 200px 1fr; gap: 18px; }
+  .side { background: var(--bg-raised); border:1px solid var(--border); border-radius: 14px; padding: 10px; display:flex; flex-direction:column; gap: 2px; }
+  .item { display:flex; align-items:center; gap: 10px; padding: 9px 12px; border-radius: 10px; color: var(--fg-3); font-size: 13px; font-weight: 500; cursor:pointer; }
+  .item .ico { width:14px;height:14px; }
+  .item:hover { color: var(--fg-1); background: var(--surface-2); }
+  .item.active { background: var(--accent-soft); color: var(--accent); position:relative; }
+  .item.active::before { content:''; position:absolute; left:-2px; top:8px; bottom:8px; width:3px; border-radius: 0 3px 3px 0; background: var(--accent); }
+  /* mobile bottom nav */
+  .bot { background: rgba(8,9,14,0.72); backdrop-filter: blur(20px) saturate(140%); border:1px solid var(--border); border-radius: 14px; padding: 8px; display:flex; gap: 4px; align-self:end; }
+  .bn { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; padding: 6px 0; color: var(--fg-4); font-size: 10px; cursor:pointer; }
+  .bn .dot { width:18px;height:18px;border-radius:5px; background: currentColor; opacity:.4 }
+  .bn.active { color: var(--accent); }
+  .bn.active .dot { opacity: 1; }
+</style></head><body>
+<div class="side">
+  <div class="item"><span class="ico">⌂</span> Início</div>
+  <div class="item active"><span class="ico">▦</span> Dashboard</div>
+  <div class="item"><span class="ico">▤</span> Baralhos</div>
+  <div class="item"><span class="ico">▣</span> Estudar</div>
+  <div class="item"><span class="ico">★</span> Vestibular</div>
+  <div class="item"><span class="ico">▼</span> Estatísticas</div>
+</div>
+<div class="bot">
+  <div class="bn"><div class="dot"></div>Início</div>
+  <div class="bn active"><div class="dot"></div>Dash</div>
+  <div class="bn"><div class="dot"></div>Decks</div>
+  <div class="bn"><div class="dot"></div>Estudar</div>
+  <div class="bn"><div class="dot"></div>Vest.</div>
+</div>
+</body></html>

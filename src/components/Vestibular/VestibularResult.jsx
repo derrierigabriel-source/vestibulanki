@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Trophy, RotateCcw, Home, ChevronDown, ChevronUp, CheckCircle, XCircle, Minus } from 'lucide-react'
 
 const LETTER = ['A', 'B', 'C', 'D']
+const UFPR_REFERENCE = 42
 
 function formatDuration(seconds) {
   const h = Math.floor(seconds / 3600)
@@ -12,133 +13,138 @@ function formatDuration(seconds) {
 export default function VestibularResult({ examData, onRetry, onHome }) {
   const { results, duration, deckConfigs } = examData
   const [expandedDeck, setExpandedDeck] = useState(null)
-  const [showAll, setShowAll] = useState(false)
 
-  // UFPR scoring
-  const totalScore = results.reduce((sum, r) => {
+  const rawScore = results.reduce((sum, r) => {
     if (r.correct) return sum + 1
     if (r.wrong) return sum - 0.25
     return sum
   }, 0)
-  const finalScore = Math.max(0, totalScore)
+  const finalScore = Math.max(0, rawScore)
+  const passed = finalScore >= UFPR_REFERENCE
 
-  // By deck
   const deckScores = deckConfigs.map(({ deck }) => {
-    const deckResults = results.filter((r) => r.deckId === deck.id)
-    const correct = deckResults.filter((r) => r.correct).length
-    const wrong = deckResults.filter((r) => r.wrong).length
-    const blank = deckResults.filter((r) => r.blank).length
+    const dr = results.filter((r) => r.deckId === deck.id)
+    const correct = dr.filter((r) => r.correct).length
+    const wrong = dr.filter((r) => r.wrong).length
+    const blank = dr.filter((r) => r.blank).length
     const score = Math.max(0, correct - wrong * 0.25)
-    return { deck, correct, wrong, blank, total: deckResults.length, score, results: deckResults }
+    return { deck, correct, wrong, blank, total: dr.length, score, results: dr }
   })
 
   const correctCount = results.filter((r) => r.correct).length
   const wrongCount = results.filter((r) => r.wrong).length
   const blankCount = results.filter((r) => r.blank).length
 
-  const UFPR_REFERENCE = 42 // fictional reference score
+  const trophyBg = passed ? 'var(--success-soft)' : 'var(--warning-soft)'
+  const trophyColor = passed ? 'var(--success)' : 'var(--warning)'
 
   return (
-    <div className="max-w-2xl mx-auto w-full">
+    <div style={{ maxWidth: 640, margin: '0 auto', width: '100%' }}>
       {/* Header */}
-      <div className="text-center mb-6">
-        <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 ${
-          finalScore >= UFPR_REFERENCE ? 'bg-emerald-50 dark:bg-emerald-900/20' : 'bg-amber-50 dark:bg-amber-900/20'
-        }`}>
-          <Trophy className={`w-10 h-10 ${finalScore >= UFPR_REFERENCE ? 'text-emerald-500' : 'text-amber-500'}`} />
+      <div style={{ textAlign: 'center', marginBottom: 24 }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          width: 72, height: 72, borderRadius: '50%',
+          background: trophyBg, marginBottom: 14,
+        }}>
+          <Trophy style={{ width: 34, height: 34, color: trophyColor }} />
         </div>
-        <h2 className="text-2xl font-bold text-stone-900 dark:text-white mb-1" style={{ fontFamily: 'Instrument Serif, serif' }}>
+        <h2 style={{ margin: '0 0 4px', fontSize: 22, fontWeight: 700, color: 'var(--fg-1)', fontFamily: 'var(--font-serif)' }}>
           Resultado do Simulado
         </h2>
-        <p className="text-stone-400 text-sm">Tempo: {formatDuration(duration)}</p>
+        <p style={{ margin: 0, fontSize: 13, color: 'var(--fg-4)' }}>Tempo: {formatDuration(duration)}</p>
       </div>
 
       {/* Score */}
-      <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 mb-4 text-center">
-        <p className="text-sm text-stone-500 dark:text-stone-400 mb-1">Pontuação total (UFPR)</p>
-        <div className="text-5xl font-bold text-stone-900 dark:text-white mb-2">
+      <div style={{
+        background: 'var(--surface)', border: '1px solid var(--border-strong)',
+        borderRadius: 'var(--r-xl)', padding: '24px 20px', marginBottom: 12, textAlign: 'center',
+      }}>
+        <p style={{ margin: '0 0 6px', fontSize: 12, color: 'var(--fg-4)' }}>Pontuação total (UFPR)</p>
+        <div style={{ fontSize: 52, fontWeight: 800, color: 'var(--fg-1)', lineHeight: 1, marginBottom: 10, fontFamily: 'var(--font-display)' }}>
           {finalScore.toFixed(2)}
         </div>
-        <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${
-          finalScore >= UFPR_REFERENCE
-            ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600'
-            : 'bg-amber-100 dark:bg-amber-900/30 text-amber-600'
-        }`}>
-          {finalScore >= UFPR_REFERENCE ? '✓ Acima da nota de corte' : '↓ Abaixo da nota de corte'}
-        </div>
-        <p className="text-xs text-stone-400 mt-2">
+        <span style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          padding: '4px 14px', borderRadius: 99, fontSize: 12, fontWeight: 600,
+          background: passed ? 'var(--success-soft)' : 'var(--warning-soft)',
+          color: passed ? 'var(--success)' : 'var(--warning)',
+        }}>
+          {passed ? '✓ Acima da nota de corte' : '↓ Abaixo da nota de corte'}
+        </span>
+        <p style={{ margin: '10px 0 0', fontSize: 11, color: 'var(--fg-4)' }}>
           Referência UFPR 2024: {UFPR_REFERENCE} pontos (fictício)
         </p>
       </div>
 
       {/* Quick stats */}
-      <div className="grid grid-cols-3 gap-3 mb-4">
-        <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl p-4 text-center">
-          <CheckCircle className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
-          <div className="text-2xl font-bold text-emerald-600">{correctCount}</div>
-          <p className="text-xs text-stone-500">Acertos</p>
-        </div>
-        <div className="bg-red-50 dark:bg-red-900/20 rounded-2xl p-4 text-center">
-          <XCircle className="w-5 h-5 text-red-500 mx-auto mb-1" />
-          <div className="text-2xl font-bold text-red-600">{wrongCount}</div>
-          <p className="text-xs text-stone-500">Erros</p>
-        </div>
-        <div className="bg-stone-50 dark:bg-stone-800 rounded-2xl p-4 text-center">
-          <Minus className="w-5 h-5 text-stone-400 mx-auto mb-1" />
-          <div className="text-2xl font-bold text-stone-500">{blankCount}</div>
-          <p className="text-xs text-stone-500">Em branco</p>
-        </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10, marginBottom: 12 }}>
+        {[
+          { icon: <CheckCircle style={{ width: 18, height: 18, color: 'var(--success)' }} />, val: correctCount, label: 'Acertos', bg: 'var(--success-soft)', color: 'var(--success)' },
+          { icon: <XCircle style={{ width: 18, height: 18, color: 'var(--danger)' }} />, val: wrongCount, label: 'Erros', bg: 'var(--danger-soft)', color: 'var(--danger)' },
+          { icon: <Minus style={{ width: 18, height: 18, color: 'var(--fg-4)' }} />, val: blankCount, label: 'Em branco', bg: 'var(--surface-2)', color: 'var(--fg-3)' },
+        ].map(({ icon, val, label, bg, color }) => (
+          <div key={label} style={{ background: bg, borderRadius: 'var(--r-xl)', padding: '14px 10px', textAlign: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 4 }}>{icon}</div>
+            <div style={{ fontSize: 24, fontWeight: 700, color, lineHeight: 1 }}>{val}</div>
+            <p style={{ margin: '4px 0 0', fontSize: 11, color: 'var(--fg-4)' }}>{label}</p>
+          </div>
+        ))}
       </div>
 
       {/* By deck */}
-      <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl overflow-hidden mb-4">
-        <div className="px-5 py-3 border-b border-stone-100 dark:border-stone-800">
-          <h3 className="text-sm font-semibold text-stone-700 dark:text-stone-300">Por matéria</h3>
+      <div style={{
+        background: 'var(--surface)', border: '1px solid var(--border-strong)',
+        borderRadius: 'var(--r-xl)', overflow: 'hidden', marginBottom: 12,
+      }}>
+        <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--border-subtle)' }}>
+          <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--fg-2)' }}>Por matéria</span>
         </div>
-        {deckScores.map(({ deck, correct, wrong, blank, total, score, results: dr }) => (
-          <div key={deck.id} className="border-b border-stone-100 dark:border-stone-800 last:border-0">
+        {deckScores.map(({ deck, correct, total, score, results: dr }, idx) => (
+          <div key={deck.id} style={{ borderBottom: idx < deckScores.length - 1 ? '1px solid var(--border-subtle)' : 'none' }}>
             <button
               onClick={() => setExpandedDeck(expandedDeck === deck.id ? null : deck.id)}
-              className="w-full flex items-center gap-3 px-5 py-3 hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
+              style={{
+                width: '100%', display: 'flex', alignItems: 'center', gap: 12,
+                padding: '12px 20px', border: 'none', background: 'transparent', cursor: 'pointer',
+                textAlign: 'left',
+              }}
             >
-              <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: deck.color }} />
-              <span className="flex-1 text-left text-sm font-medium text-stone-700 dark:text-stone-300">
-                {deck.name}
-              </span>
-              <span className="text-sm font-bold text-stone-900 dark:text-white">{score.toFixed(2)}</span>
-              <span className="text-xs text-stone-400">{correct}/{total}</span>
-              {expandedDeck === deck.id ? (
-                <ChevronUp className="w-4 h-4 text-stone-400" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-stone-400" />
-              )}
+              <div style={{ width: 10, height: 10, borderRadius: 99, background: deck.color, flexShrink: 0 }} />
+              <span style={{ flex: 1, fontSize: 13, fontWeight: 500, color: 'var(--fg-2)' }}>{deck.name}</span>
+              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--fg-1)' }}>{score.toFixed(2)}</span>
+              <span style={{ fontSize: 11, color: 'var(--fg-4)', minWidth: 40, textAlign: 'right' }}>{correct}/{total}</span>
+              {expandedDeck === deck.id
+                ? <ChevronUp style={{ width: 14, height: 14, color: 'var(--fg-4)', flexShrink: 0 }} />
+                : <ChevronDown style={{ width: 14, height: 14, color: 'var(--fg-4)', flexShrink: 0 }} />}
             </button>
 
             {expandedDeck === deck.id && (
-              <div className="px-5 pb-3 space-y-2">
+              <div style={{ padding: '0 20px 12px' }}>
                 {dr.map((r, i) => (
-                  <div key={i} className="flex items-start gap-3 py-2 border-t border-stone-100 dark:border-stone-800">
-                    <span className={`flex-shrink-0 mt-0.5 ${
-                      r.correct ? 'text-emerald-500' : r.wrong ? 'text-red-500' : 'text-stone-400'
-                    }`}>
-                      {r.correct ? <CheckCircle className="w-4 h-4" /> : r.wrong ? <XCircle className="w-4 h-4" /> : <Minus className="w-4 h-4" />}
+                  <div key={i} style={{
+                    display: 'flex', alignItems: 'flex-start', gap: 10,
+                    padding: '10px 0',
+                    borderTop: '1px solid var(--border-subtle)',
+                  }}>
+                    <span style={{ flexShrink: 0, marginTop: 1, color: r.correct ? 'var(--success)' : r.wrong ? 'var(--danger)' : 'var(--fg-4)' }}>
+                      {r.correct
+                        ? <CheckCircle style={{ width: 14, height: 14 }} />
+                        : r.wrong ? <XCircle style={{ width: 14, height: 14 }} />
+                        : <Minus style={{ width: 14, height: 14 }} />}
                     </span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-stone-600 dark:text-stone-400 leading-relaxed mb-1">
-                        {r.question.front}
-                      </p>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <p style={{ margin: 0, fontSize: 12, color: 'var(--fg-3)', lineHeight: 1.5 }}>{r.question.front}</p>
                       {r.wrong && (
-                        <p className="text-xs text-emerald-600 dark:text-emerald-400">
-                          ✓ {LETTER[r.question.correctOption]}) {r.question.options?.[r.question.correctOption]}
-                        </p>
-                      )}
-                      {r.wrong && (
-                        <p className="text-xs text-stone-400 mt-1 italic">{r.question.back}</p>
+                        <>
+                          <p style={{ margin: '4px 0 0', fontSize: 12, color: 'var(--success)' }}>
+                            ✓ {LETTER[r.question.correctOption]}) {r.question.options?.[r.question.correctOption]}
+                          </p>
+                          <p style={{ margin: '3px 0 0', fontSize: 11, color: 'var(--fg-4)', fontStyle: 'italic' }}>{r.question.back}</p>
+                        </>
                       )}
                     </div>
-                    <span className={`text-xs font-bold flex-shrink-0 ${
-                      r.correct ? 'text-emerald-500' : r.wrong ? 'text-red-500' : 'text-stone-400'
-                    }`}>
+                    <span style={{ fontSize: 11, fontWeight: 700, flexShrink: 0, color: r.correct ? 'var(--success)' : r.wrong ? 'var(--danger)' : 'var(--fg-4)' }}>
                       {r.correct ? '+1,00' : r.wrong ? '−0,25' : '0'}
                     </span>
                   </div>
@@ -150,18 +156,25 @@ export default function VestibularResult({ examData, onRetry, onHome }) {
       </div>
 
       {/* Actions */}
-      <div className="flex gap-3">
+      <div style={{ display: 'flex', gap: 10 }}>
         <button
           onClick={onHome}
-          className="flex-1 flex items-center justify-center gap-2 py-3 border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-300 rounded-xl font-medium hover:bg-stone-50 dark:hover:bg-stone-800 transition-colors"
+          style={{
+            flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            padding: '11px', borderRadius: 'var(--r-lg)',
+            border: '1px solid var(--border-strong)',
+            background: 'transparent', color: 'var(--fg-2)',
+            fontWeight: 500, fontSize: 14, cursor: 'pointer',
+          }}
         >
-          <Home className="w-4 h-4" /> Início
+          <Home style={{ width: 15, height: 15 }} /> Início
         </button>
         <button
           onClick={onRetry}
-          className="flex-1 flex items-center justify-center gap-2 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-semibold transition-colors"
+          className="btn-primary"
+          style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: '11px' }}
         >
-          <RotateCcw className="w-4 h-4" /> Novo simulado
+          <RotateCcw style={{ width: 15, height: 15 }} /> Novo simulado
         </button>
       </div>
     </div>

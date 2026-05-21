@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset="utf-8" /><title>Radii</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin:0; padding:20px; background: var(--bg); font-family: var(--font-sans); }
+  .grid { display:grid; grid-template-columns: repeat(6,1fr); gap: 12px; }
+  .tile { aspect-ratio: 1/1; background: var(--surface); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; }
+  .name { font-family: var(--font-mono); font-size: 10px; color: var(--fg-3); }
+  .px { font-size: 13px; color: var(--fg-1); font-weight:600; }
+</style></head><body>
+<div class="grid">
+  <div class="tile" style="border-radius:6px"><span class="px">6</span><span class="name">r-xs</span></div>
+  <div class="tile" style="border-radius:8px"><span class="px">8</span><span class="name">r-sm</span></div>
+  <div class="tile" style="border-radius:12px"><span class="px">12</span><span class="name">r-md</span></div>
+  <div class="tile" style="border-radius:16px"><span class="px">16</span><span class="name">r-lg</span></div>
+  <div class="tile" style="border-radius:20px"><span class="px">20</span><span class="name">r-xl</span></div>
+  <div class="tile" style="border-radius:9999px"><span class="px">∞</span><span class="name">r-full</span></div>
+</div>
+</body></html>

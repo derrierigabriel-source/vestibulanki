@@ -27,3 +27,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Assistente (Python)
+assistente/.venv/
+assistente/.env
+__pycache__/

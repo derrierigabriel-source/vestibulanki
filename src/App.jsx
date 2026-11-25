@@ -10,10 +10,11 @@ import Decks from './pages/Decks'
 import Study from './pages/Study'
 import Vestibular from './pages/Vestibular'
 import Stats from './pages/Stats'
+import Assistente from './pages/Assistente'
 import Dashboard from './components/Dashboard'
 import {
   LayoutDashboard, Layers, BookOpen, GraduationCap, BarChart2,
-  Sun, Moon, LogOut, Menu, X, House,
+  Sun, Moon, LogOut, Menu, X, House, Bot,
 } from 'lucide-react'
 
 function useTheme() {
@@ -38,6 +39,7 @@ const NAV = [
   { to: '/study', label: 'Estudar', icon: BookOpen },
   { to: '/vestibular', label: 'Vestibular', icon: GraduationCap },
   { to: '/stats', label: 'Estatísticas', icon: BarChart2 },
+  { to: '/assistente', label: 'Assistente', icon: Bot },
 ]
 
 function Brand({ size = 28, fontSize = 15 }) {
@@ -209,6 +211,7 @@ export default function App() {
                     <Route path="/study" element={<Study />} />
                     <Route path="/vestibular" element={<Vestibular />} />
                     <Route path="/stats" element={<Stats />} />
+                    <Route path="/assistente" element={<Assistente />} />
                   </Routes>
                 </AppLayout>
               </ProtectedRoute>

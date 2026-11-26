@@ -3,9 +3,21 @@ import { getDecks } from './deckService'
 import { getCards } from './cardService'
 import { getSessions, getSimulations } from './statsService'
 
-// Local: servidor FastAPI. Publicado: /api (o firebase.json redireciona /api/chat para a Cloud Function).
-const URL_ASSISTENTE =
-  import.meta.env.VITE_ASSISTENTE_URL || (import.meta.env.DEV ? 'http://localhost:8000' : '/api')
+// Local (npm run dev): servidor em localhost:8000. Publicado: endereço do Render em .env.production.
+const URL_ASSISTENTE = (import.meta.env.VITE_ASSISTENTE_URL || 'http://localhost:8000').replace(/\/$/, '')
+
+/**
+ * No plano gratuito do Render o servidor "dorme" após 15 min sem uso e leva ~1 min para acordar.
+ * Chamamos /saude assim que a página abre, para ele ir ligando enquanto o aluno lê/digita.
+ */
+export async function acordarAssistente() {
+  try {
+    const res = await fetch(`${URL_ASSISTENTE}/saude`)
+    return res.ok
+  } catch {
+    return false
+  }
+}
 
 const iso = (v) => {
   if (!v) return null

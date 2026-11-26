@@ -4,4 +4,3 @@ uvicorn>=0.30
 python-dotenv>=1.0
 google-auth>=2.30
 requests>=2.31
-firebase-functions>=0.4

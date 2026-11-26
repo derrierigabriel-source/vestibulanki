@@ -62,25 +62,22 @@ uvicorn servidor:app --reload --port 8000
 Em outro terminal, na raiz do projeto: `npm run dev` e abra **Assistente** no menu.
 (No `.env` do app, `VITE_ASSISTENTE_URL=http://localhost:8000`.)
 
-## Publicar (site + assistente no Firebase)
+## Publicar (grátis: assistente no Render + site no Firebase)
 
-Na nuvem, o assistente roda como **Cloud Function** (`main.py`) no mesmo projeto Firebase. O site
-chama `/api/chat` e o `firebase.json` redireciona essa rota para a função. A função sempre verifica
-o login, aceita no máximo 3 instâncias ao mesmo tempo e lê a chave da Anthropic do Secret Manager.
+O servidor Python roda no **plano gratuito do Render**, configurado pelo `render.yaml` na raiz do
+repositório. O site continua no Firebase Hosting (plano gratuito) e chama o endereço do Render,
+que fica em `.env.production`.
 
-Pré-requisitos (uma vez só):
-1. Projeto no plano **Blaze** (Firebase Console → Upgrade). Cloud Functions não roda no plano gratuito.
-2. `firebase login --reauth`
-3. `firebase functions:secrets:set ANTHROPIC_API_KEY` (cole a chave quando pedir).
-4. O `.env` da raiz do projeto preenchido (configuração web do Firebase).
-5. A pasta `assistente/venv` com Python 3.12 (o Firebase procura esse nome exato):
-   `py -3.12 -m venv venv` e `venv\Scripts\pip install -r requirements.txt`
+1. Entre em https://render.com com a conta do GitHub.
+2. **New + → Blueprint**, escolha o repositório `vestibulanki` e confirme.
+3. Quando ele pedir `ANTHROPIC_API_KEY`, cole a chave. Ela fica só no painel do Render.
+4. Ao terminar, abra `https://<endereço-do-render>/saude`: deve aparecer `{"ok":true,"verifica_login":true}`.
+   Se o endereço não for `https://vestibulanki-assistente.onrender.com`, atualize `.env.production`.
+5. Site (na raiz do projeto): `npm run build` e `firebase deploy --only hosting`.
 
-Deploy (na raiz do projeto):
-```bash
-npm run build
-firebase deploy --only functions,hosting
-```
+Plano gratuito: depois de 15 minutos sem uso o servidor dorme, e a primeira pergunta demora
+cerca de 1 minuto. A página do assistente já "acorda" o servidor ao abrir; antes de apresentar,
+abra a página uns minutos antes.
 
 ## Avaliação (evidências dos testes)
 

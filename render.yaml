@@ -1,0 +1,23 @@
+# Blueprint do Render: servidor Python do assistente (pasta assistente/), plano gratuito.
+# No Render: New + → Blueprint → escolha este repositório. Ele pede o valor de ANTHROPIC_API_KEY.
+services:
+  - type: web
+    name: vestibulanki-assistente
+    runtime: python
+    plan: free
+    rootDir: assistente
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn servidor:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /saude
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: ANTHROPIC_API_KEY
+        sync: false            # segredo: digitado no painel do Render, nunca no repositório
+      - key: FIREBASE_PROJECT_ID
+        value: vestibulanki    # liga a verificação de login do Firebase
+      - key: CORS_ORIGINS
+        value: https://vestibulanki.web.app,https://vestibulanki.firebaseapp.com,http://localhost:5173
+      - key: ASSISTENTE_LIMITE_HORA
+        value: "30"

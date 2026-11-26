@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Bot, Send, Loader2, AlertCircle, RefreshCw, FileText, User } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { montarDadosDoAluno, perguntarAoAssistente } from '../services/assistenteService'
+import { acordarAssistente, montarDadosDoAluno, perguntarAoAssistente } from '../services/assistenteService'
 
 const SUGESTOES = [
   'Qual trilha eu deveria fazer agora?',
@@ -73,6 +73,7 @@ export default function Assistente() {
   const [texto, setTexto] = useState('')
   const [pensando, setPensando] = useState(false)
   const [erro, setErro] = useState(null)
+  const [servidor, setServidor] = useState('ligando') // ligando | pronto | fora
   const fimRef = useRef(null)
 
   const carregarDados = async () => {
@@ -91,6 +92,12 @@ export default function Assistente() {
   useEffect(() => { carregarDados() }, [user.uid]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
+    let ativo = true
+    acordarAssistente().then((ok) => { if (ativo) setServidor(ok ? 'pronto' : 'fora') })
+    return () => { ativo = false }
+  }, [])
+
+  useEffect(() => {
     fimRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [mensagens, pensando])
 
@@ -105,6 +112,7 @@ export default function Assistente() {
     try {
       const r = await perguntarAoAssistente({ pergunta: p, dados, historico })
       setMensagens((m) => [...m, { role: 'assistant', content: r.resposta, fontes: r.fontes }])
+      setServidor('pronto')
     } catch (e) {
       setErro(e.message)
     } finally {
@@ -165,7 +173,10 @@ export default function Assistente() {
 
         {pensando && (
           <div className="flex items-center gap-2 text-sm text-stone-500 pl-11">
-            <Loader2 className="w-4 h-4 animate-spin" /> Analisando seus dados…
+            <Loader2 className="w-4 h-4 animate-spin" />
+            {servidor === 'pronto'
+              ? 'Analisando seus dados…'
+              : 'Ligando o assistente (na primeira pergunta pode levar até 1 minuto)…'}
           </div>
         )}
 
@@ -201,6 +212,8 @@ export default function Assistente() {
         </button>
       </form>
       <p className="text-[11px] text-center text-stone-400 mt-2">
+        {servidor === 'ligando' && 'Ligando o assistente… '}
+        {servidor === 'fora' && 'Servidor do assistente fora do ar no momento. '}
         Respostas geradas por IA a partir dos seus dados. Confira os números no Dashboard.
       </p>
     </div>

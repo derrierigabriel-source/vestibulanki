@@ -55,12 +55,32 @@ cd assistente
 python -m venv .venv
 .venv\Scripts\activate          # Windows  (Linux/Mac: source .venv/bin/activate)
 pip install -r requirements.txt
-copy .env.example .env          # preencha ANTHROPIC_API_KEY e FIREBASE_PROJECT_ID
+copy .env.example .env.local    # preencha ANTHROPIC_API_KEY e FIREBASE_PROJECT_ID
 uvicorn servidor:app --reload --port 8000
 ```
 
 Em outro terminal, na raiz do projeto: `npm run dev` e abra **Assistente** no menu.
 (No `.env` do app, `VITE_ASSISTENTE_URL=http://localhost:8000`.)
+
+## Publicar (site + assistente no Firebase)
+
+Na nuvem, o assistente roda como **Cloud Function** (`main.py`) no mesmo projeto Firebase. O site
+chama `/api/chat` e o `firebase.json` redireciona essa rota para a função. A função sempre verifica
+o login, aceita no máximo 3 instâncias ao mesmo tempo e lê a chave da Anthropic do Secret Manager.
+
+Pré-requisitos (uma vez só):
+1. Projeto no plano **Blaze** (Firebase Console → Upgrade). Cloud Functions não roda no plano gratuito.
+2. `firebase login --reauth`
+3. `firebase functions:secrets:set ANTHROPIC_API_KEY` (cole a chave quando pedir).
+4. O `.env` da raiz do projeto preenchido (configuração web do Firebase).
+5. A pasta `assistente/venv` com Python 3.12 (o Firebase procura esse nome exato):
+   `py -3.12 -m venv venv` e `venv\Scripts\pip install -r requirements.txt`
+
+Deploy (na raiz do projeto):
+```bash
+npm run build
+firebase deploy --only functions,hosting
+```
 
 ## Avaliação (evidências dos testes)
 

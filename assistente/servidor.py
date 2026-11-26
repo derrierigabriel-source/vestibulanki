@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import os
 import time
+from pathlib import Path
 from collections import defaultdict, deque
 
 import anthropic
@@ -20,7 +21,8 @@ from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-load_dotenv()
+# Local: .env.local (o deploy do Firebase ignora esse arquivo; na nuvem a chave vem do Secret Manager)
+load_dotenv(Path(__file__).parent / ".env.local")
 
 from assistente import responder  # noqa: E402  (depois do load_dotenv)
 
@@ -79,6 +81,11 @@ def saude():
 
 @app.post("/chat")
 def chat(pedido: Pedido, authorization: str | None = Header(default=None)):
+    return atender(pedido, authorization)
+
+
+def atender(pedido: Pedido, authorization: str | None) -> dict:
+    """Lógica do /chat, usada pelo FastAPI (local) e pela Cloud Function (main.py)."""
     uid = _usuario(authorization)
     _checar_limite(uid)
     try:

@@ -27,7 +27,7 @@ sys.path.insert(0, str(AQUI.parent))
 
 from dotenv import load_dotenv  # noqa: E402
 
-load_dotenv(AQUI.parent / ".env")
+load_dotenv(AQUI.parent / ".env.local")
 
 from assistente import responder  # noqa: E402
 from prompts import MUDANCAS  # noqa: E402

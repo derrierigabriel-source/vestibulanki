@@ -3,7 +3,9 @@ import { getDecks } from './deckService'
 import { getCards } from './cardService'
 import { getSessions, getSimulations } from './statsService'
 
-const URL_ASSISTENTE = import.meta.env.VITE_ASSISTENTE_URL || 'http://localhost:8000'
+// Local: servidor FastAPI. Publicado: /api (o firebase.json redireciona /api/chat para a Cloud Function).
+const URL_ASSISTENTE =
+  import.meta.env.VITE_ASSISTENTE_URL || (import.meta.env.DEV ? 'http://localhost:8000' : '/api')
 
 const iso = (v) => {
   if (!v) return null
